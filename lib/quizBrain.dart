@@ -30,6 +30,10 @@ class QuizBrain {
         true),
   ];
 
+  void resetQuestionNo() {
+    _questionNo = 0;
+  }
+
   bool nextQuestion() {
     if (_questionNo < _questionBank.length - 1) {
       _questionNo++;

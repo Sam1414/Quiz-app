@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quizBrain.dart';
 
 void main() => runApp(Quizzler());
@@ -28,10 +29,41 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   QuizBrain quizBrain = QuizBrain();
   List<Icon> scoreKeeper = [];
+  void restartQuiz() {
+    setState(() {
+      quizBrain.resetQuestionNo();
+      scoreKeeper = [];
+    });
+  }
+
   void evaluate(bool buttonValue) {
     bool answer = quizBrain.getAnswer();
     setState(() {
       bool isNextQuestion = quizBrain.nextQuestion();
+      if (isNextQuestion == false) {
+        Alert(
+          context: context,
+          type: AlertType.info,
+          title: 'Quiz Ended',
+          desc: 'Click restart, to give the quiz again!',
+          buttons: [
+            DialogButton(
+              child: Text(
+                'RESTART',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                restartQuiz();
+              },
+              width: 120.0,
+            )
+          ],
+        ).show();
+      }
       if (buttonValue == answer && isNextQuestion == true) {
         scoreKeeper.add(Icon(
           Icons.check,
